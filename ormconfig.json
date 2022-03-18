@@ -1,0 +1,20 @@
+{
+  "type": "mssql",
+  "port": 1433,
+  "host": "bihospitalar.com.br",
+  "username": "sa",
+  "password": "@Mepm2412",
+  "database": "SIASG",
+  "options": {
+    "trustServerCertificate": true
+  },
+  "migrations": [
+    "./src/shared/infra/typeorm/migrations/*.ts"
+  ],
+  "entities": [
+    "./src/modules/**/infra/typeorm/entities/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/shared/infra/typeorm/migrations"
+  }
+}

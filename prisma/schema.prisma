@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B6135E9D815") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model TB_CATMAT_CLASSES {
+  Id               Decimal          @unique(map: "IX_TB_CATMAT_CLASSES_Id") @db.Decimal(18, 0)
+  Cod_Grupo        String           @db.VarChar(2)
+  Cod_Classe       String           @id(map: "PK_TB_CATMAT_CLASSES") @db.VarChar(4)
+  Classe           String           @db.VarChar(512)
+  Insert_Date      DateTime?        @default(dbgenerated("[dbo].[MyDate]()"), map: "DF_TB_CATMAT_CLASSES_Insert_Date") @db.DateTime
+  Insert_User      String?          @db.VarChar(256)
+  Update_Date      DateTime?        @db.DateTime
+  Update_User      String?          @db.VarChar(256)
+  TB_CATMAT_GRUPOS TB_CATMAT_GRUPOS @relation(fields: [Cod_Grupo], references: [Cod_Grupo], onUpdate: NoAction, map: "FK_TB_CATMAT_CLASSES_TB_CATMAT_GRUPOS")
+  TB_CATMAT_PDM    TB_CATMAT_PDM[]
+
+  @@index([Cod_Grupo], map: "IX_TB_CATMAT_CLASSES_Cod_Grupo")
+}
+
+model TB_CATMAT_GRUPOS {
+  Id                Decimal             @unique(map: "IX_TB_CATMAT_GRUPOS_Id") @db.Decimal(18, 0)
+  Cod_Grupo         String              @id(map: "PK_TB_CATMAT_GRUPOS") @db.VarChar(2)
+  Grupo             String              @unique(map: "IX_TB_CATMAT_GRUPOS_Grupo") @db.VarChar(512)
+  Insert_Date       DateTime?           @default(dbgenerated("[dbo].[MyDate]()"), map: "DF_TB_CATMAT_GRUPOS_Insert_Date") @db.DateTime
+  Insert_User       String?             @db.VarChar(256)
+  Update_Date       DateTime?           @db.DateTime
+  Update_User       String?             @db.VarChar(256)
+  TB_CATMAT_CLASSES TB_CATMAT_CLASSES[]
+}
+
+model TB_CATMAT_MATERIAIS {
+  Id            Decimal       @unique(map: "IX_TB_CATMAT_MATERIAIS") @db.Decimal(18, 0)
+  Cod_PDM       String        @db.VarChar(5)
+  CATMAT        String        @id(map: "PK_TB_CATMAT_MATERIAIS") @db.VarChar(6)
+  Material      String        @db.VarChar(2048)
+  Status        String        @default("SIM", map: "DF_TB_CATMAT_MATERIAIS_Status") @db.VarChar(16)
+  Sustentavel   String?       @db.VarChar(32)
+  Insert_Date   DateTime?     @default(dbgenerated("[DBO].[MYDATE]()"), map: "DF_TB_CATMAT_MATERIAIS_Insert_Date") @db.DateTime
+  Insert_User   String?       @db.VarChar(256)
+  Update_Date   DateTime?     @db.DateTime
+  Update_User   String?       @db.VarChar(256)
+  TB_CATMAT_PDM TB_CATMAT_PDM @relation(fields: [Cod_PDM], references: [Cod_PDM], onUpdate: NoAction, map: "FK_TB_CATMAT_MATERIAIS_TB_CATMAT_PDM")
+}
+
+model TB_CATMAT_PDM {
+  Id                  Decimal               @unique(map: "IX_TB_CATMAT_PDM_Id") @db.Decimal(18, 0)
+  Cod_Classe          String                @db.VarChar(4)
+  Cod_PDM             String                @id(map: "PK_TB_CATMAT_PDM") @db.VarChar(5)
+  PDM                 String                @unique(map: "IX_TB_CATMAT_PDM_PDM") @db.VarChar(512)
+  Insert_Date         DateTime?             @default(dbgenerated("[dbo].[MyDate]()"), map: "DF_TB_CATMAT_PDM_Insert_Date") @db.DateTime
+  Insert_User         String?               @db.VarChar(256)
+  Update_Date         DateTime?             @db.DateTime
+  Update_User         String?               @db.VarChar(256)
+  TB_CATMAT_CLASSES   TB_CATMAT_CLASSES     @relation(fields: [Cod_Classe], references: [Cod_Classe], onUpdate: NoAction, map: "FK_TB_CATMAT_PDM_TB_CATMAT_CLASSES")
+  TB_CATMAT_MATERIAIS TB_CATMAT_MATERIAIS[]
+}
+
+model TB_SIASG_COMPRAS {
+  Id                   Decimal   @id(map: "PK_TB_SIASG_COMPRAS") @unique(map: "IX_TB_SIASG_COMPRAS_Id") @db.Decimal(18, 0)
+  LINHA_MERCADO        Decimal?  @db.Decimal(18, 0)
+  LINHA_CATMAT         Decimal?  @db.Decimal(18, 0)
+  MERCADO              String?   @db.VarChar(100)
+  PDM                  String?   @db.VarChar(100)
+  CATMAT               String?   @db.VarChar(100)
+  ATUALIZACAO          String?   @db.VarChar(100)
+  CODIGO_BR            String?   @db.VarChar(100)
+  DESCRICAO_CATMAT     String?   @db.VarChar(Max)
+  UNIDADE_FORNECIMENTO String?   @db.VarChar(100)
+  GENERICO             String?   @db.VarChar(100)
+  REGISTRO_ANVISA      String?   @db.VarChar(100)
+  DATA_COMPRA          String?   @db.VarChar(100)
+  MODALIDADE_COMPRA    String?   @db.VarChar(100)
+  DATA_INSERCAO        String?   @db.VarChar(100)
+  TIPO_COMPRA          String?   @db.VarChar(100)
+  FABRICANTE           String?   @db.VarChar(100)
+  CNPJ_FABRICANTE      String?   @db.VarChar(100)
+  FORNECEDOR           String?   @db.VarChar(100)
+  CNPJ_FORNECEDOR      String?   @db.VarChar(100)
+  QUALIFICACAO         String?   @db.VarChar(100)
+  NOME_INSTITUICAO     String?   @db.VarChar(100)
+  CNPJ_INSTITUICAO     String?   @db.VarChar(100)
+  MUNICIPIO            String?   @db.VarChar(100)
+  UF                   String?   @db.VarChar(100)
+  QTD_ITENS_COMPRADOS  Decimal?  @db.Decimal(18, 2)
+  PRECO_UNITARIO       Decimal?  @db.Decimal(18, 2)
+  MEDIA_PONDERADA      Decimal?  @db.Decimal(18, 2)
+  TOTAL                Decimal?  @db.Decimal(18, 2)
+  ANO_MERCADO          Decimal?  @db.Decimal(18, 0)
+  IMPORTADO_POR        String?   @db.VarChar(100)
+  DATA_IMPORTACAO      DateTime? @default(now(), map: "DF_TB_SIASG_COMPRAS_DATA_IMPORTACAO") @db.Date
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model TB_MEDITRONIC_MARKET {
+  Id          Decimal   @db.Decimal(18, 0)
+  Cod_Classe  String    @db.VarChar(4)
+  Cod_PDM     String    @db.VarChar(5)
+  PDM         String    @db.VarChar(512)
+  Insert_Date DateTime? @db.DateTime
+  Insert_User String?   @db.VarChar(256)
+  Update_Date DateTime? @db.DateTime
+  Update_User String?   @db.VarChar(256)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model TBL_USUARIOS {
+  EMAIL_USUARIOS String? @db.VarChar(50)
+  NOME_USUARIOS  String? @db.VarChar(50)
+
+  @@ignore
+}
