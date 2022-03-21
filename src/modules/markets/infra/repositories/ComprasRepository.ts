@@ -9,7 +9,6 @@ export class ComprasRepository implements IComprasRepository {
   }
   async listAll(): Promise<Compras[]> {
     const compras = await this.repository.find()
-    console.log(compras)
     return compras
   }
 }
