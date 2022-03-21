@@ -1,4 +1,4 @@
-import { Compras } from "modules/markets/infra/typeorm/entities/Compras";
+import { Compras } from "../../infra/typeorm/entities/Compras";
 import { inject, injectable } from "tsyringe";
 import { IComprasRepository } from "../../repositories/IComprasRepository";
 

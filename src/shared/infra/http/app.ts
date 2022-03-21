@@ -2,7 +2,7 @@
 import cors from 'cors';
 import 'reflect-metadata';
 import 'express-async-errors';
-import 'shared/containers'
+import '../../../shared/containers'
 import createConnection from './typeorm';
 import { router } from './routes';
 
