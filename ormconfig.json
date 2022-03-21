@@ -17,4 +17,4 @@
   "cli": {
     "migrationsDir": "./dist/shared/infra/typeorm/migrations"
   }
-}
+ }
