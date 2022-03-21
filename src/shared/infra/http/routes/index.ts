@@ -1,5 +1,5 @@
 ﻿import { Router } from 'express';
-import { ComprasController } from 'modules/markets/UseCases/ComprasUseCases/ComprasController';
+import { ComprasController } from '../../../../modules/markets/UseCases/ComprasUseCases/ComprasController';
 
 const router = Router();
 
